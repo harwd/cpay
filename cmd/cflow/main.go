@@ -20,6 +20,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	address, err := client.GetNewAddress()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("new address:", address)
+
 	log.Printf("chain: %s", info.Chain)
 	log.Printf("blocks: %d", info.Blocks)
 }

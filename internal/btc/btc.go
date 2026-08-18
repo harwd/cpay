@@ -32,3 +32,12 @@ func NewClient(env env.Env) (*Client, error) {
 func (c *Client) GetBlockchainInfo() (*btcjson.GetBlockChainInfoResult, error) {
 	return c.rpc.GetBlockChainInfo()
 }
+
+func (c *Client) GetNewAddress() (string, error) {
+	address, err := c.rpc.GetNewAddress("")
+	if err != nil {
+		return "", err
+	}
+
+	return address.EncodeAddress(), nil
+}
