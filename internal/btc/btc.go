@@ -1,6 +1,7 @@
 package btc
 
 import (
+	"github.com/btcsuite/btcd/btcjson"
 	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/mlloc/cflow/internal/env"
 )
@@ -26,4 +27,8 @@ func NewClient(env env.Env) (*Client, error) {
 	return &Client{
 		rpc: rpc,
 	}, nil
+}
+
+func (c *Client) GetBlockchainInfo() (*btcjson.GetBlockChainInfoResult, error) {
+	return c.rpc.GetBlockChainInfo()
 }

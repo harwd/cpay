@@ -10,8 +10,16 @@ import (
 func main() {
 	vars := env.Load()
 
-	_, err := btc.NewClient(vars)
+	client, err := btc.NewClient(vars)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	info, err := client.GetBlockchainInfo()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("chain: %s", info.Chain)
+	log.Printf("blocks: %d", info.Blocks)
 }
