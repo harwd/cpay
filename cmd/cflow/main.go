@@ -2,31 +2,18 @@ package main
 
 import (
 	"log"
+	"net/http"
 
-	"github.com/mlloc/cflow/internal/btc"
-	"github.com/mlloc/cflow/internal/env"
+	"github.com/mlloc/cflow/internal/api"
 )
 
 func main() {
-	vars := env.Load()
+	router := api.NewRouter()
 
-	client, err := btc.NewClient(vars)
+	log.Println("starting api on :8080")
+
+	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	info, err := client.GetBlockchainInfo()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	address, err := client.GetNewAddress()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("new address:", address)
-
-	log.Printf("chain: %s", info.Chain)
-	log.Printf("blocks: %d", info.Blocks)
 }
