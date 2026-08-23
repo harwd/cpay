@@ -1,5 +1,7 @@
 package pay
 
+import "github.com/mlloc/cflow/internal/btc"
+
 type Payment struct {
 	Id       string
 	Currency string
@@ -7,4 +9,21 @@ type Payment struct {
 	Address  string
 	Status   string
 	TXID     string
+}
+
+type Service struct {
+	btc *btc.Client
+}
+
+func (s *Service) CreatePayment(currency string, amount int) (*Payment, error) {
+	addr, err := s.btc.GetNewAddress()
+
+	payment := &Payment{
+		Currency: currency,
+		Amount: amount,
+		Address: addr,
+		Status: "pending",
+	}
+
+	return payment, err
 }
