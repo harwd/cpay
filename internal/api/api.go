@@ -1,10 +1,15 @@
 package api
 
 import (
-	"fmt"
+	"encoding/json"
 	"io"
 	"net/http"
 )
+
+type PaymentRequest struct {
+	Currency string `json:"currency"`
+	Amount   int    `json:"amount"`
+}
 
 func NewRouter() *http.ServeMux {
 	mux := http.NewServeMux()
@@ -15,14 +20,19 @@ func NewRouter() *http.ServeMux {
 }
 
 func createPayment(w http.ResponseWriter, r *http.Request) {
+	var req PaymentRequest
+
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "error reading body", http.StatusBadRequest)
 		return
 	}
 
-	body := string(bytes)
-	fmt.Println(body)
+	err = json.Unmarshal(bytes, &req)
+	if err != nil {
+		http.Error(w, "invalid json", http.StatusBadRequest)
+		return
+	}
 
 	w.WriteHeader(http.StatusCreated)
 }
